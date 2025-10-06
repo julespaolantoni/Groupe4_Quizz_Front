@@ -1,16 +1,17 @@
-import { Component } from "@angular/core"
-import { Link } from "models/links.model"
+import { Component, OnInit } from "@angular/core";
+import { QuizService } from "services/quizz.service";
 
 @Component({
-  selector: "navbar",
-  templateUrl: "./navbar.component.html",
+  selector: 'nav-bar',
+  templateUrl: './navbar.component.html',
   styleUrls: ["./navbar.component.scss"],
 })
-export class NavbarComponent {
-  links: Link[] = []
+export class NavBarComponent implements OnInit {
+  userName: string | null = null;
 
-  constructor() {
-    this.links.push({ name: "Étudiants", href: "etudiants" })
-    this.links.push({ name: "Filières", href: "filieres" })
+  constructor(private quizService: QuizService) {}
+
+  ngOnInit() {
+    this.userName = this.quizService.getUser();
   }
 }

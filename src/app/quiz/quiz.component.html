@@ -1,0 +1,23 @@
+<div *ngIf="!quizCompleted" class="quiz-container">
+  <mat-card>
+    <mat-card-title>Question {{ currentQuestionIndex + 1 }} / {{ questions.length }}</mat-card-title>
+    <mat-card-content>
+      <p>{{ currentQuestion.question }}</p>
+      <mat-radio-group [(ngModel)]="selectedAnswer">
+        <mat-radio-button *ngFor="let answer of currentQuestion.answers" [value]="answer">
+          {{ answer }}
+        </mat-radio-button>
+      </mat-radio-group>
+    </mat-card-content>
+    <mat-card-actions>
+      <button mat-raised-button color="primary" (click)="submitAnswer()">Valider</button>
+    </mat-card-actions>
+  </mat-card>
+</div>
+
+<div *ngIf="quizCompleted" class="result-container">
+  <h2>Quiz terminé ! 🎉</h2>
+  <p>Bravo, tu as fini le quiz Disney.</p>
+  <p>Ton score : <span>{{ score }} / {{ questions.length }}</span></p>
+  <button mat-raised-button color="primary" (click)="restartQuiz()">Rejouer</button>
+</div>

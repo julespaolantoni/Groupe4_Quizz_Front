@@ -1,26 +1,19 @@
-@use "theme";
-@import "./bootstrap/_bootstrap";
+@import url('https://fonts.googleapis.com/css2?family=Permanent+Marker&display=swap');
 
-/* You can add global styles to this file, and also import other style files */
-
-html, body { height: 100%;}
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
-
-.mat-mini-fab {
-  color : theme.$white !important;
+body {
+  font-family: 'Roboto', sans-serif;
+  background: linear-gradient(to right, #ffecd2, #fcb69f);
+  margin: 0;
+  padding: 0;
 }
 
-.mat-raised-button {
-  color : theme.$white !important;
+.logo {
+  font-family: 'Permanent Marker', cursive;
+  color: #ff4081;
 }
-
-table {
-  font-size: medium;
-  tr {
-    height: 57px;
-    td {
-      vertical-align: middle;
-    }
-  }
-
+@font-face {
+  font-family: 'Waltograph';
+  src: url('/assets/fonts/WaltographUI.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
 }

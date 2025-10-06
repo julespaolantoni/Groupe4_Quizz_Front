@@ -1,40 +1,69 @@
-@use "theme";
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background: linear-gradient(90deg, #0052cc 0%, #1a73e8 100%);
+  color: white;
+  display: flex;
+  align-items: center;
+  padding: 0 24px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 
-nav {
-  height: 80px;
-  background: linear-gradient(to right, theme.$common-purple, theme.$common-red);
+  .logo {
+    font-weight: 900;
+    font-size: 1.8rem;
+    font-family: 'Waltograph', cursive; // Police Disney personnalisée
+    letter-spacing: 2px;
+    user-select: none;
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+  }
 
-  div {
-    height: 100%;
-    display: flex;
-    align-items: center;
+  .spacer {
+    flex: 1 1 auto;
+  }
 
-    img {
-      margin-left: 20px;
-      height: 60px;
-      transition: 0.3s;
+  nav {
+  display: flex;
+  gap: 12px;
 
-      &:hover {
-        transform: scale(1.1);
-      }
+  button {
+    font-weight: 600;
+    font-size: 1.05rem;
+    color: #ffd000; // 👈 couleur par défaut du texte (ex : orange pâle)
+    background-color: rgb(25, 65, 242); // 👈 fond discret
+    text-transform: none;
+    padding: 8px 16px;
+    border-radius: 8px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    min-width: 90px;
+
+    &.active-link,
+    &:hover {
+      background-color: rgba(255, 0, 0, 0.872);
+      color: #ffd600; // Jaune vif au survol ou actif
     }
   }
-}
 
-mat-nav-list {
-  margin-left: 50px;
-  display: flex;
-  flex-direction: row;
-  width: 250px;
 
-  span,
-  a {
-    font-size: large;
-    color: theme.$white;
-    transition: 0.3s;
+    // Spécifique au bouton icône (profil)
+    button[mat-icon-button] {
+      padding: 0;
+      min-width: unset;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
 
-    &:hover {
-      transform: scale(1.2);
+      mat-icon {
+        font-size: 28px;
+        color: orange;
+        transition: color 0.3s ease;
+
+        &:hover {
+          color: #ffd600;
+        }
+      }
     }
   }
 }

@@ -1,30 +1,33 @@
-import { NgModule } from "@angular/core"
-import { BrowserModule } from "@angular/platform-browser"
-
-import { AppRoutingModule } from "app-routing.module"
-import { AppComponent } from "app.component"
-import { BrowserAnimationsModule } from "@angular/platform-browser/animations"
-import { NavbarComponent } from "navbar/navbar.component"
-import { MatListModule } from "@angular/material/list"
-import { HomeComponent } from "home/home.component"
-import { StudentsComponent } from "students/students.component"
-import { StudentDetailsComponent } from "students/student-details/student-details.component"
-import { FormsModule } from "@angular/forms"
-import { MatIconModule } from "@angular/material/icon"
-import { MatButtonModule } from "@angular/material/button"
-import { MajorsComponent } from "majors/majors.component"
-import { MajorStudentsComponent } from "majors/major-students/major-students.component"
-import { HttpClientModule } from "@angular/common/http"
+import { NgModule } from "@angular/core";
+import { BrowserModule } from "@angular/platform-browser";
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatCardModule } from '@angular/material/card';
+import { AppRoutingModule } from "./app-routing.module";  // <-- chemin relatif
+import { AppComponent } from "./app.component";           // <-- idem
+import { HomeComponent } from "./home/home.component";     // <-- idem
+import { MatListModule } from "@angular/material/list";
+import { FormsModule } from "@angular/forms";
+import { HttpClientModule } from "@angular/common/http";
+import { QuizComponent } from "quiz/quiz.component";
+import { StatsComponent } from "stats/stats.component";
+import { AuthComponent } from "auth/auth.component";
+import { MatRadioModule } from '@angular/material/radio';
+import { MatTableModule } from '@angular/material/table';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatIconModule } from '@angular/material/icon';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
+import { NavBarComponent } from './navbar/navbar.component';
 
 @NgModule({
   declarations: [
     AppComponent,
-    NavbarComponent,
     HomeComponent,
-    StudentsComponent,
-    StudentDetailsComponent,
-    MajorsComponent,
-    MajorStudentsComponent,
+    QuizComponent, 
+    StatsComponent,
+    AuthComponent,
+    NavBarComponent
   ],
   imports: [
     BrowserModule,
@@ -32,12 +35,17 @@ import { HttpClientModule } from "@angular/common/http"
     BrowserAnimationsModule,
     MatListModule,
     FormsModule,
+    MatCardModule,
+    MatRadioModule,
+    MatTableModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatToolbarModule,
+    MatProgressBarModule,
     MatIconModule,
-    MatButtonModule,
     HttpClientModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
 })
-export class AppModule {
-}
+export class AppModule {}

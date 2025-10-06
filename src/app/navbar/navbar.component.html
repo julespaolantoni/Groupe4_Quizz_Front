@@ -1,12 +1,14 @@
-<nav>
-  <div>
-    <img src="assets/takima-logo.png" routerLink="" />
-    <mat-nav-list>
-      @for (link of links; track link) {
-      <a mat-list-item routerLink="{{ link.href }}" routerLinkActive="active">
-        <span>{{ link.name }}</span>
-      </a>
-      }
-    </mat-nav-list>
-  </div>
-</nav>
+<!-- navbar.component.html -->
+<mat-toolbar class="navbar" role="navigation">
+  <span class="logo">Disney Quiz</span>
+  <span class="spacer"></span>
+
+  <nav>
+    <button mat-button routerLink="/home" routerLinkActive="active-link"[routerLinkActiveOptions]="{ exact: true }">Accueil</button>
+    <button mat-button routerLink="/quiz" routerLinkActive="active-link">Quiz</button>
+    <button mat-button routerLink="/stats" routerLinkActive="active-link">Stats</button>
+    <button mat-icon-button routerLink="/auth" aria-label="Login">
+      <mat-icon>account_circle</mat-icon>
+    </button>
+  </nav>
+</mat-toolbar>

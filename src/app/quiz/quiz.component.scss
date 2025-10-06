@@ -1,0 +1,47 @@
+.quiz-container {
+  max-width: 600px;
+  margin: 50px auto;
+
+  mat-card {
+    padding: 20px;
+    background: #fff8e1; /* couleur douce Disney */
+  }
+
+  mat-radio-button {
+    display: block;
+    margin: 10px 0;
+  }
+
+  button {
+    margin-top: 20px;
+  }
+}
+.result-container {
+  max-width: 400px;
+  margin: 40px auto;
+  padding: 30px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  text-align: center;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  color: #333;
+
+  h2 {
+    color: #1976d2; // bleu material
+    font-weight: 700;
+    margin-bottom: 12px;
+  }
+
+  p {
+    font-size: 18px;
+    margin: 8px 0;
+  }
+
+  // Score en gros
+  p:last-child {
+    font-size: 24px;
+    font-weight: 700;
+    color: #388e3c; // vert positif
+  }
+}

@@ -1,0 +1,29 @@
+<div class="auth-container">
+  <mat-card>
+    <h2>{{ isLoginMode ? 'Connexion' : 'Inscription' }}</h2>
+    <form (ngSubmit)="onSubmit()">
+      <mat-form-field appearance="fill" *ngIf="!isLoginMode">
+        <mat-label>Nom d'utilisateur</mat-label>
+        <input matInput [(ngModel)]="userName" name="userName" required />
+      </mat-form-field>
+
+      <mat-form-field appearance="fill">
+        <mat-label>Email</mat-label>
+        <input matInput [(ngModel)]="email" name="email" type="email" required />
+      </mat-form-field>
+
+      <mat-form-field appearance="fill">
+        <mat-label>Mot de passe</mat-label>
+        <input matInput [(ngModel)]="password" name="password" type="password" required />
+      </mat-form-field>
+
+      <button mat-raised-button color="primary" type="submit">
+        {{ isLoginMode ? 'Se connecter' : 'S\'inscrire' }}
+      </button>
+    </form>
+    <button mat-button (click)="toggleMode()">
+      {{ isLoginMode ? 'Créer un compte' : 'Déjà un compte ? Connectez-vous' }}
+    </button>
+    <p class="message">{{ message }}</p>
+  </mat-card>
+</div>

@@ -1,4 +1,3 @@
-/* To learn more about this file see: https://angular.io/config/tsconfig. */
 {
   "compileOnSave": false,
   "compilerOptions": {
@@ -23,6 +22,7 @@
       "dom"
     ],
     "useDefineForClassFields": false
+    // Remove "types" or "typeRoots" if present
   },
   "angularCompilerOptions": {
     "enableI18nLegacyMessageIdFormat": false,

@@ -1,0 +1,38 @@
+<h2 class="title">Statistiques du Quizz Disney</h2>
+
+<table mat-table [dataSource]="stats" class="mat-elevation-z8 stats-table">
+
+  <!-- Question Column -->
+  <ng-container matColumnDef="question">
+    <th mat-header-cell *matHeaderCellDef> Question </th>
+    <td mat-cell *matCellDef="let stat"> {{ stat.question }} </td>
+  </ng-container>
+
+  <!-- Correct Column -->
+  <ng-container matColumnDef="correct">
+    <th mat-header-cell *matHeaderCellDef> Réponses correctes </th>
+    <td mat-cell *matCellDef="let stat"> {{ stat.correct }} </td>
+  </ng-container>
+
+  <!-- Total Column -->
+  <ng-container matColumnDef="total">
+    <th mat-header-cell *matHeaderCellDef> Total réponses </th>
+    <td mat-cell *matCellDef="let stat"> {{ stat.total }} </td>
+  </ng-container>
+
+  <!-- Percentage Column -->
+  <ng-container matColumnDef="percentage">
+    <th mat-header-cell *matHeaderCellDef> % de réussite </th>
+    <td mat-cell *matCellDef="let stat">
+      <mat-progress-bar
+        mode="determinate"
+        [value]="stat.percentage"
+        color="primary">
+      </mat-progress-bar>
+      <span class="percentage-text">{{ stat.percentage }}%</span>
+    </td>
+  </ng-container>
+
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+</table>
