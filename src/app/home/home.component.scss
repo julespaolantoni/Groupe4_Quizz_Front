@@ -1,19 +1,72 @@
-.home-container {
-  text-align: center;
-  margin-top: 100px;
+@import url('https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap');
 
-  h1 {
-    font-size: 3rem;
-    color: #1e88e5; /* bleu sympa */
-    margin-bottom: 20px;
-  }
-  p {
-    font-size: 1.2rem;
-    color: #555;
-    margin-bottom: 30px;
-  }
-  button {
-    font-size: 1.1rem;
-    padding: 12px 30px;
-  }
+/* Vidéo en arrière-plan */
+.video-background {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  object-fit: cover;
+  z-index: -1;
+  pointer-events: none; /* important pour permettre les clics */
+}
+
+/* Contenu principal */
+.disney-home-content {
+  position: relative;
+  z-index: 1;
+  text-align: center;
+  padding: 100px 20px;
+  font-family: 'Fredoka One', cursive;
+  color: #fff;
+  text-shadow: 2px 2px 5px #000;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  animation: fadeIn 1s ease-out;
+}
+
+.disney-home-content h1 {
+  font-size: 3.5rem;
+  margin-bottom: 20px;
+}
+
+.disney-home-content p {
+  font-size: 1.5rem;
+  margin-bottom: 40px;
+  max-width: 600px;
+}
+
+.start-btn {
+  font-size: 1.3rem;
+  padding: 15px 40px;
+  background: #ffca28;
+  border: none;
+  border-radius: 30px;
+  color: #6a1b9a;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  transition: transform 0.3s ease, background 0.3s ease;
+}
+
+.start-btn:hover {
+  background: #fff59d;
+  transform: scale(1.1);
+}
+.video-background::after {
+  content: "";
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw; height: 100vh;
+  background: rgba(0, 0, 0, 0.4); /* ou violet avec 0.3 */
+  z-index: 0;
+}
+
+/* Animation d’apparition */
+@keyframes fadeIn {
+  0% { opacity: 0; transform: translateY(-30px); }
+  100% { opacity: 1; transform: translateY(0); }
 }
