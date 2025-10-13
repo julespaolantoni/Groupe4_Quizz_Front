@@ -1,26 +1,21 @@
 import { Component, OnInit } from '@angular/core';
-
-interface Stat {
-  question: string;
-  correct: number;
-  total: number;
-  percentage: number;
-}
+import { QuizService } from '../services/quiz.service';
 
 @Component({
   selector: 'app-stats',
-  templateUrl: './stats.component.html',
-  styleUrls: ['./stats.component.scss']
+  templateUrl: './stats.component.html'
 })
 export class StatsComponent implements OnInit {
-  displayedColumns: string[] = ['question', 'correct', 'total', 'percentage'];
-  stats: Stat[] = [
-    { question: 'Quelle est la couleur de la robe de Belle ?', correct: 7, total: 10, percentage: 70 },
-    { question: 'Qui est le méchant dans Le Roi Lion ?', correct: 8, total: 10, percentage: 80 },
-    { question: 'Combien d\'amis a Dingo ?', correct: 5, total: 10, percentage: 50 },
-  ];
+  sondageId = 1; // à adapter
+  results: any[] = [];
+  loading = true;
 
-  constructor() {}
+  constructor(private quizService: QuizService) {}
 
-  ngOnInit(): void {}
+  ngOnInit() {
+    this.quizService.getResultsParSondage(this.sondageId).subscribe(data => {
+      this.results = data;
+      this.loading = false;
+    });
+  }
 }

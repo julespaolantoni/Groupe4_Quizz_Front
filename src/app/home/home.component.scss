@@ -10,6 +10,31 @@
   object-fit: cover;
   z-index: -1;
   pointer-events: none; /* important pour permettre les clics */
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.video-background.active {
+  opacity: 1;
+}
+
+/* Overlay plein écran cliquable pour lancer la vidéo */
+.video-overlay-button {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgb(0, 0, 0);
+  color: #fff;
+  font-family: 'Fredoka One', cursive;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  z-index: 10;
+  user-select: none;
+  text-align: center;
+  padding: 20px;
 }
 
 /* Contenu principal */
@@ -43,10 +68,11 @@
 .start-btn {
   font-size: 1.3rem;
   padding: 15px 40px;
+  font-family: 'Waltograph', sans-serif;
   background: #ffca28;
   border: none;
   border-radius: 30px;
-  color: #6a1b9a;
+  color: #c402ff;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
   cursor: pointer;
   transition: transform 0.3s ease, background 0.3s ease;
@@ -56,6 +82,7 @@
   background: #fff59d;
   transform: scale(1.1);
 }
+
 .video-background::after {
   content: "";
   position: fixed;

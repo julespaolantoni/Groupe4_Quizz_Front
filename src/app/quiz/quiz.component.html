@@ -1,23 +1,20 @@
-<div *ngIf="!quizCompleted" class="quiz-container">
-  <mat-card>
-    <mat-card-title>Question {{ currentQuestionIndex + 1 }} / {{ questions.length }}</mat-card-title>
-    <mat-card-content>
-      <p>{{ currentQuestion.question }}</p>
-      <mat-radio-group [(ngModel)]="selectedAnswer">
-        <mat-radio-button *ngFor="let answer of currentQuestion.answers" [value]="answer">
-          {{ answer }}
-        </mat-radio-button>
-      </mat-radio-group>
-    </mat-card-content>
-    <mat-card-actions>
-      <button mat-raised-button color="primary" (click)="submitAnswer()">Valider</button>
-    </mat-card-actions>
-  </mat-card>
+<div *ngIf="loading">Chargement du quiz...</div>
+<div *ngIf="errorMessage">{{errorMessage}}</div>
+
+<div *ngIf="!loading && !quizFinished && questions.length > 0" class="quiz-container">
+  <h2>Question {{currentIndex + 1}} / {{questions.length}}</h2>
+  <p>{{questions[currentIndex].texte}}</p>
+
+  <div class="options">
+    <button *ngFor="let option of questions[currentIndex].options"
+            (click)="selectOption(option)">
+      {{option.texte}}
+    </button>
+  </div>
 </div>
 
-<div *ngIf="quizCompleted" class="result-container">
-  <h2>Quiz terminé ! 🎉</h2>
-  <p>Bravo, tu as fini le quiz Disney.</p>
-  <p>Ton score : <span>{{ score }} / {{ questions.length }}</span></p>
-  <button mat-raised-button color="primary" (click)="restartQuiz()">Rejouer</button>
+<div *ngIf="quizFinished" class="result">
+  <h2>Merci d'avoir participé !</h2>
+  <p>Vous avez répondu à {{questions.length}} questions.</p>
+  <button (click)="restartQuiz()">Recommencer</button>
 </div>

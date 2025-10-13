@@ -19,6 +19,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { NavBarComponent } from './navbar/navbar.component';
+import { AdminComponent } from "admin/admin.component";
 
 @NgModule({
   declarations: [
@@ -27,7 +28,8 @@ import { NavBarComponent } from './navbar/navbar.component';
     QuizComponent, 
     StatsComponent,
     AuthComponent,
-    NavBarComponent
+    NavBarComponent,
+    AdminComponent
   ],
   imports: [
     BrowserModule,

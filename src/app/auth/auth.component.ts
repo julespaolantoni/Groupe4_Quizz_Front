@@ -1,6 +1,5 @@
 import { Component } from '@angular/core';
-import { QuizService } from 'services/quizz.service';
-
+import { AuthService } from '../services/auth.service'; // ajuste le chemin
 
 @Component({
   selector: 'app-auth',
@@ -14,7 +13,7 @@ export class AuthComponent {
   isLoginMode = true;
   message = '';
 
-  constructor(private quizService: QuizService) {}
+  constructor(private authService: AuthService) {}
 
   toggleMode() {
     this.isLoginMode = !this.isLoginMode;
@@ -28,20 +27,17 @@ export class AuthComponent {
     }
 
     if (this.isLoginMode) {
-      // Simule login
-      this.quizService.setUser(this.email);
+      this.authService.setUser(this.email);
       this.message = `Connecté en tant que ${this.email}`;
     } else {
       if (!this.userName) {
         this.message = 'Veuillez saisir un nom d\'utilisateur';
         return;
       }
-      // Simule inscription
-      this.quizService.setUser(this.userName);
+      this.authService.setUser(this.userName);
       this.message = `Inscrit et connecté en tant que ${this.userName}`;
     }
 
-    // Reset champs
     this.email = '';
     this.password = '';
     this.userName = '';

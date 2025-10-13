@@ -1,25 +1,34 @@
-import { Component, OnInit, ViewChild, ElementRef, AfterViewInit } from "@angular/core";
+import { Component, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 
 @Component({
-  selector: "home",
-  templateUrl: "./home.component.html",
-  styleUrls: ["./home.component.scss"],
+  selector: 'home',
+  templateUrl: './home.component.html',
+  styleUrls: ['./home.component.scss'],
 })
-export class HomeComponent implements OnInit, AfterViewInit {
+export class HomeComponent implements AfterViewInit {
   @ViewChild('videoRef') videoElement!: ElementRef<HTMLVideoElement>;
 
-  constructor() {}
+  videoStarted = false;
 
-  ngOnInit(): void {}
-
-  ngAfterViewInit(): void {
+  ngAfterViewInit() {
     const video = this.videoElement.nativeElement;
 
     video.addEventListener('timeupdate', () => {
       if (video.currentTime >= 29) {
         video.pause();
-        video.currentTime = 29; // Assure l'arrêt à 29s exact
+        video.currentTime = 29;
       }
     });
+  }
+
+  startVideo() {
+    const video = this.videoElement.nativeElement;
+    video.play()
+      .then(() => {
+        this.videoStarted = true;
+      })
+      .catch(err => {
+        console.error('Erreur lors du lancement de la vidéo :', err);
+      });
   }
 }

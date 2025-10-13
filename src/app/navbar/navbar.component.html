@@ -1,15 +1,19 @@
-<!-- navbar.component.html -->
 <mat-toolbar class="navbar" role="navigation">
   <img src="assets/logoD.png" alt="Logo Disney Quiz" class="logo-image" />
   <span class="logo">Disney Quiz</span>
   <span class="spacer"></span>
 
   <nav>
-    <button mat-button routerLink="/home" routerLinkActive="active-link"[routerLinkActiveOptions]="{ exact: true }">Accueil</button>
+    <button mat-button routerLink="/home" routerLinkActive="active-link" [routerLinkActiveOptions]="{ exact: true }">Accueil</button>
     <button mat-button routerLink="/quiz" routerLinkActive="active-link">Quiz</button>
     <button mat-button routerLink="/stats" routerLinkActive="active-link">Stats</button>
-    <button mat-icon-button routerLink="/auth" aria-label="Login">
+
+    <!-- Afficher Login si pas connecté -->
+    <button *ngIf="!userName" mat-icon-button routerLink="/login" aria-label="Login">
       <mat-icon>account_circle</mat-icon>
     </button>
+
+    <!-- Afficher Logout si connecté -->
+    <button *ngIf="userName" mat-button (click)="logout()">Logout</button>
   </nav>
 </mat-toolbar>

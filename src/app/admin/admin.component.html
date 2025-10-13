@@ -1,0 +1,35 @@
+<div>
+  <h2>Ajouter une nouvelle question</h2>
+
+  <input
+    type="text"
+    [(ngModel)]="newQuestionText"
+    placeholder="Texte de la question"
+  />
+
+  <div *ngFor="let option of newOptionsText; let i = index">
+    <input
+      type="text"
+      [(ngModel)]="newOptionsText[i]"
+      placeholder="Option réponse"
+    />
+    <button (click)="removeOptionField(i)" *ngIf="newOptionsText.length > 1">Supprimer</button>
+  </div>
+
+  <button (click)="addOptionField()">Ajouter une option</button>
+  <button (click)="addQuestion()">Ajouter la question</button>
+
+  <hr />
+
+  <h3>Questions existantes</h3>
+  <ul>
+  <li *ngFor="let question of questions">
+    {{ question.texte }}
+    <ul>
+      <li *ngFor="let option of question.options">
+        {{ option.texte }}
+      </li>
+    </ul>
+  </li>
+</ul>
+</div>

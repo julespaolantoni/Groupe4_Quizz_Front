@@ -1,10 +1,27 @@
-<!-- index.component.html -->
-<video #videoRef autoplay muted playsinline class="video-background">
+<!-- La vidéo, cachée au départ -->
+<video
+  #videoRef
+  muted
+  playsinline
+  preload="auto"
+  class="video-background"
+  [class.active]="videoStarted"
+>
   <source src="assets/videoD.mp4" type="video/mp4" />
   Votre navigateur ne prend pas en charge la vidéo.
 </video>
 
-<div class="disney-home-content">
+<!-- Le "bouton" plein écran -->
+<div
+  *ngIf="!videoStarted"
+  class="video-overlay-button"
+  (click)="startVideo()"
+>
+  <h2>Cliquez n’importe où pour démarrer la vidéo</h2>
+</div>
+
+<!-- Contenu principal affiché uniquement quand vidéo lancée -->
+<div *ngIf="videoStarted" class="disney-home-content">
   <h1>✨ Bienvenue dans le Quiz Magique Disney ! ✨</h1>
   <p>Plonge dans l’univers féerique de Disney et teste tes connaissances !</p>
   <button routerLink="/quiz" class="start-btn">🎬 Commencer le Quiz</button>

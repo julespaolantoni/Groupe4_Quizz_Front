@@ -1,61 +1,69 @@
-import { Component } from '@angular/core';
-
-interface Question {
-  question: string;
-  answers: string[];
-  correctAnswer: string;
-}
+import { Component, OnInit } from '@angular/core';
+import { QuizService, QuestionDTO, ReponseOptionDTO } from '../services/quiz.service';
 
 @Component({
   selector: 'app-quiz',
   templateUrl: './quiz.component.html',
   styleUrls: ['./quiz.component.scss']
 })
-export class QuizComponent {
-  currentQuestionIndex: number = 0;
-  selectedAnswer: string = '';
-  quizCompleted: boolean = false;
-  score: number = 0;
+export class QuizComponent implements OnInit {
+  sondageId = 1; // à changer selon ton cas (ex: route param)
+  questions: QuestionDTO[] = [];
+  currentIndex = 0;
+  quizFinished = false;
+  userAnswers: number[] = []; // IDs des options choisies
 
-  questions: Question[] = [
-    {
-      question: "Quel est le prénom de la princesse dans 'La Petite Sirène' ?",
-      answers: ["Ariel", "Belle", "Jasmine", "Cendrillon"],
-      correctAnswer: "Ariel"
-    },
-    {
-      question: "Qui est le méchant dans Le Roi Lion ?",
-      answers: ["Simba", "Mufasa", "Scar", "Timon"],
-      correctAnswer: "Mufasa"
-    },
-    {
-      question: "Combien d'amis a Dingo ?",
-      answers: ["0", "3", "5", "8"],
-      correctAnswer: "5"
-    }
-    // Ajoute plus de questions si tu veux
-  ];
+  loading = true;
+  errorMessage = '';
 
-  get currentQuestion(): Question {
-    return this.questions[this.currentQuestionIndex];
+  constructor(private quizService: QuizService) {}
+
+  ngOnInit(): void {
+    this.loadQuestions();
   }
 
-  submitAnswer() {
-    // Exemple simple : on avance juste à la question suivante
-    if(this.selectedAnswer === this.currentQuestion.correctAnswer){
-      this.score++;
-    }
-    this.selectedAnswer = '';
-    this.currentQuestionIndex++;
-    if(this.currentQuestionIndex >= this.questions.length){
-      this.quizCompleted = true;
+  loadQuestions() {
+    this.quizService.getQuestions(this.sondageId).subscribe({
+      next: questions => {
+        this.questions = questions;
+        this.loading = false;
+      },
+      error: err => {
+        this.errorMessage = "Erreur lors du chargement des questions.";
+        this.loading = false;
+      }
+    });
+  }
+
+  selectOption(option: ReponseOptionDTO) {
+    // Enregistre la réponse utilisateur
+    this.userAnswers[this.currentIndex] = option.id;
+
+    // Envoie le vote au backend
+    this.quizService.voterOption(option.id).subscribe({
+      next: () => {
+        this.goToNext();
+      },
+      error: () => {
+        alert("Erreur lors de l'envoi du vote.");
+        this.goToNext();
+      }
+    });
+  }
+
+  goToNext() {
+    if (this.currentIndex < this.questions.length - 1) {
+      this.currentIndex++;
+    } else {
+      this.quizFinished = true;
     }
   }
+
   restartQuiz() {
-  this.score = 0;
-  this.currentQuestionIndex = 0;
-  this.quizCompleted = false;
-  this.currentQuestionIndex = 0;
-}
-
+    this.currentIndex = 0;
+    this.quizFinished = false;
+    this.userAnswers = [];
+    this.loadQuestions();
+  }
+  
 }
