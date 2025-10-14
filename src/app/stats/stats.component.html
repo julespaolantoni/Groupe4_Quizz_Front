@@ -15,10 +15,8 @@
   <h3>{{ questions[0].texteQuestion }}</h3>
 
   <ul>
-  <li *ngFor="let option of questions[0].options">
-    {{ option.texteOption }} - {{ option.resultat?.nombreVotes || 0 }} votes
-    ({{ getVotePercentage(option.resultat?.nombreVotes || 0) }})
-  </li>
-</ul>
-
+    <li *ngFor="let option of questions[0].options">
+      {{ option.texteOption }} - {{ option.resultat.nombreVotes}} votes
+    </li>
+  </ul>
 </div>

@@ -1,24 +1,25 @@
 import { Injectable } from '@angular/core';
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
 export class AuthService {
-  private currentUser: string | null = null;
+  private adminLoggedIn = false;
 
-  setUser(user: string) {
-    this.currentUser = user;
+  login(email: string, password: string): boolean {
+    // Identifiants admin factices
+    if (email === 'admin@site.com' && password === 'admin123') {
+      this.adminLoggedIn = true;
+      return true;
+    }
+    return false;
   }
 
-  getUser(): string | null {
-    return this.currentUser;
+  logout(): void {
+    this.adminLoggedIn = false;
   }
 
-  isAuthenticated(): boolean {
-    return this.currentUser !== null;
-  }
-
-  logout() {
-    this.currentUser = null;
+  isLoggedIn(): boolean {
+    return this.adminLoggedIn;
   }
 }

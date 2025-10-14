@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
-import { AuthService } from '../services/auth.service'; // ajuste le chemin
+import { Router } from '@angular/router';
+import { AuthService } from 'services/auth.service';
+
 
 @Component({
   selector: 'app-auth',
@@ -9,16 +11,9 @@ import { AuthService } from '../services/auth.service'; // ajuste le chemin
 export class AuthComponent {
   email = '';
   password = '';
-  userName = '';
-  isLoginMode = true;
   message = '';
 
-  constructor(private authService: AuthService) {}
-
-  toggleMode() {
-    this.isLoginMode = !this.isLoginMode;
-    this.message = '';
-  }
+  constructor(private authService: AuthService, private router: Router) {}
 
   onSubmit() {
     if (!this.email || !this.password) {
@@ -26,20 +21,12 @@ export class AuthComponent {
       return;
     }
 
-    if (this.isLoginMode) {
-      this.authService.setUser(this.email);
-      this.message = `Connecté en tant que ${this.email}`;
+    const success = this.authService.login(this.email, this.password);
+    if (success) {
+      this.message = 'Connecté en tant qu\'admin';
+      this.router.navigate(['/admin']);
     } else {
-      if (!this.userName) {
-        this.message = 'Veuillez saisir un nom d\'utilisateur';
-        return;
-      }
-      this.authService.setUser(this.userName);
-      this.message = `Inscrit et connecté en tant que ${this.userName}`;
+      this.message = 'Identifiants incorrects';
     }
-
-    this.email = '';
-    this.password = '';
-    this.userName = '';
   }
 }

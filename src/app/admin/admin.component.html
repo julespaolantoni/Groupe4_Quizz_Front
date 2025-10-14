@@ -1,5 +1,12 @@
-<div>
+<div class="admin-container">
   <h2>Ajouter une nouvelle question</h2>
+
+  <label for="sondageSelect">Choisir un sondage :</label>
+  <select id="sondageSelect" (change)="onSondageChange($event)" [value]="sondageId || ''">
+    <option *ngFor="let sondage of sondages" [value]="sondage.id">
+      {{ sondage.categorie }}
+    </option>
+  </select>
 
   <input
     type="text"
@@ -10,13 +17,17 @@
   <div *ngFor="let option of newOptions; let i = index">
     <input
       type="text"
-      [(ngModel)]="newOptions[i]"
-      placeholder="Option réponse"
+      [(ngModel)]="option.text"
+      placeholder="Option réponse {{ i + 1 }}"
     />
-    <button (click)="removeOptionField(i)" *ngIf="newOptions.length > 1">Supprimer</button>
+    <input
+      type="number"
+      [(ngModel)]="option.votes"
+      placeholder="Votes initiaux"
+      min="0"
+    />
   </div>
 
-  <button (click)="ajouterOption()">Ajouter une option</button>
   <button (click)="ajouterQuestion()">Ajouter la question</button>
 
   <hr />
@@ -26,7 +37,7 @@
     <h4>{{ question.texteQuestion }}</h4>
     <ul>
       <li *ngFor="let option of question.options">
-        {{ option.texteOption }}
+        {{ option.texteOption }} - {{ option.resultat.nombreVotes}} votes
       </li>
     </ul>
   </div>
