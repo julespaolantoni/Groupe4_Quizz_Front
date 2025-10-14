@@ -1,4 +1,10 @@
 @import url('https://fonts.googleapis.com/css2?family=Permanent+Marker&display=swap');
+@font-face {
+  font-family: 'Waltograph';
+  src: url('./assets/fonts/WaltographUI.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
 
 body {
   font-family: 'Roboto', sans-serif;
@@ -12,9 +18,4 @@ body {
   color: #ff4081;
 }
 
-@font-face {
-  font-family: 'Waltograph';
-  src: url('assets/fonts/waltograph/WaltographUI.ttf') format('truetype');
-  font-weight: normal;
-  font-style: normal;
-}
+

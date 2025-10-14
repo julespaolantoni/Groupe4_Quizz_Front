@@ -1,53 +1,53 @@
-// admin.component.ts
 import { Component, OnInit } from '@angular/core';
-import { QuizService, QuestionDTO, ReponseOptionDTO } from '../services/quiz.service';
+import { QuizService, QuestionDTO } from '../services/quiz.service';
 
 @Component({
   selector: 'app-admin',
-  templateUrl: './admin.component.html'
+  templateUrl: './admin.component.html',
+  styleUrls: ['./admin.component.scss']
 })
 export class AdminComponent implements OnInit {
-  sondageId = 1; // ou récupère depuis URL/routage
+  sondageId = 1;
   questions: QuestionDTO[] = [];
   newQuestionText = '';
-  newOptionsText: string[] = ['']; // une option vide par défaut
+  newOptions: string[] = [''];
 
   constructor(private quizService: QuizService) {}
 
   ngOnInit(): void {
-    this.loadQuestions();
+    this.quizService.getQuestionsBySondage(this.sondageId).subscribe((data: QuestionDTO[]) => {
+      this.questions = data;
+    });
   }
 
-  loadQuestions() {
-    this.quizService.getQuestions(this.sondageId).subscribe(data => this.questions = data);
-  }
-
-  addOptionField() {
-    this.newOptionsText.push('');
-  }
-
-  removeOptionField(index: number) {
-    this.newOptionsText.splice(index, 1);
-  }
-
-  addQuestion() {
-    if (!this.newQuestionText.trim() || this.newOptionsText.some(opt => !opt.trim())) {
-      alert('Veuillez remplir la question et toutes les options');
+  ajouterQuestion(): void {
+    if (!this.newQuestionText.trim()) {
+      alert('Veuillez saisir une question.');
+      return;
+    }
+    const filteredOptions = this.newOptions.filter(opt => opt.trim() !== '');
+    if (filteredOptions.length === 0) {
+      alert('Veuillez ajouter au moins une option.');
       return;
     }
 
-    // Crée la question via backend
-    this.quizService.addQuestion(this.sondageId, { texte: this.newQuestionText }).subscribe(question => {
-  // Ajoute les options avec { texte_option: text } --> ok selon ton service
-  const requests = this.newOptionsText.map(text =>
-    this.quizService.addOption(question.id, { texte_option: text })
-  );
-  Promise.all(requests.map(r => r.toPromise())).then(() => {
-    this.newQuestionText = '';
-    this.newOptionsText = [''];
-    this.loadQuestions();
-  });
-});
+    this.quizService.addQuestion(this.sondageId, { texteQuestion: this.newQuestionText }).subscribe((question) => {
+      filteredOptions.forEach(text => {
+        this.quizService.addOption(question.id, { texteOption: text }).subscribe();
+      });
+      this.questions.push(question);
+      this.newQuestionText = '';
+      this.newOptions = [''];
+    });
+  }
 
+  ajouterOption(): void {
+    this.newOptions.push('');
+  }
+
+  removeOptionField(index: number): void {
+    if (this.newOptions.length > 1) {
+      this.newOptions.splice(index, 1);
+    }
   }
 }

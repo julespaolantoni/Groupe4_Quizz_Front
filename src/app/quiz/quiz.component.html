@@ -1,20 +1,53 @@
-<div *ngIf="loading">Chargement du quiz...</div>
-<div *ngIf="errorMessage">{{errorMessage}}</div>
+<!-- Choix du sondage -->
+<div *ngIf="!selectedSondageId && !loading">
+  <h2>Choisissez un sondage</h2>
+  <ul>
+    <li *ngFor="let sondage of sondages">
+      <button (click)="selectSondage(sondage.id)">{{ sondage.nom }}</button>
+    </li>
+  </ul>
+</div>
 
-<div *ngIf="!loading && !quizFinished && questions.length > 0" class="quiz-container">
-  <h2>Question {{currentIndex + 1}} / {{questions.length}}</h2>
-  <p>{{questions[currentIndex].texte}}</p>
+<!-- Chargement -->
+<div *ngIf="loading">Chargement du quiz...</div>
+
+<!-- Message d'erreur -->
+<div *ngIf="errorMessage">{{ errorMessage }}</div>
+
+<!-- Affichage de la question uniquement si le quiz n'est pas fini -->
+<div *ngIf="selectedSondageId && !quizFinished && questions.length > 0" class="quiz-container">
+  <h2>Question : {{ questions[0].texteQuestion }}</h2>
 
   <div class="options">
-    <button *ngFor="let option of questions[currentIndex].options"
+    <button *ngFor="let option of questions[0].options"
             (click)="selectOption(option)">
-      {{option.texte}}
+      {{ option.texteOption }}
     </button>
   </div>
 </div>
 
-<div *ngIf="quizFinished" class="result">
+<!-- Affichage des résultats uniquement si le quiz est fini -->
+<div *ngIf="quizFinished && questions.length > 0" class="result">
   <h2>Merci d'avoir participé !</h2>
-  <p>Vous avez répondu à {{questions.length}} questions.</p>
+
+  <h3>Résultats</h3>
+
+  <p><strong>{{ questions[0].texteQuestion }} :</strong></p>
+
+  <ul>
+    <li *ngFor="let option of questions[0].options"
+        [style.fontWeight]="
+          majoritaireParQuestion[questions[0].id]?.id === option.id ? 'bold' : 'normal'
+        ">
+      {{ option.texteOption }} -
+      {{ getPourcentageVotes(getVotesForOption(questions[0].id, option.id), questions[0].id) }}%
+      <span *ngIf="userAnswers[0] !== null && userAnswers[0] === option.id">
+        <strong>
+          {{ userAnswers[0] === majoritaireParQuestion[questions[0].id]?.id ? '✅ Correct' : '❌ Incorrect' }}
+        </strong>
+      </span>
+    </li>
+  </ul>
+
   <button (click)="restartQuiz()">Recommencer</button>
 </div>

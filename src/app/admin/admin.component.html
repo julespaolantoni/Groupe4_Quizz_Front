@@ -7,29 +7,27 @@
     placeholder="Texte de la question"
   />
 
-  <div *ngFor="let option of newOptionsText; let i = index">
+  <div *ngFor="let option of newOptions; let i = index">
     <input
       type="text"
-      [(ngModel)]="newOptionsText[i]"
+      [(ngModel)]="newOptions[i]"
       placeholder="Option réponse"
     />
-    <button (click)="removeOptionField(i)" *ngIf="newOptionsText.length > 1">Supprimer</button>
+    <button (click)="removeOptionField(i)" *ngIf="newOptions.length > 1">Supprimer</button>
   </div>
 
-  <button (click)="addOptionField()">Ajouter une option</button>
-  <button (click)="addQuestion()">Ajouter la question</button>
+  <button (click)="ajouterOption()">Ajouter une option</button>
+  <button (click)="ajouterQuestion()">Ajouter la question</button>
 
   <hr />
 
   <h3>Questions existantes</h3>
-  <ul>
-  <li *ngFor="let question of questions">
-    {{ question.texte }}
+  <div *ngFor="let question of questions">
+    <h4>{{ question.texteQuestion }}</h4>
     <ul>
       <li *ngFor="let option of question.options">
-        {{ option.texte }}
+        {{ option.texteOption }}
       </li>
     </ul>
-  </li>
-</ul>
+  </div>
 </div>

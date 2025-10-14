@@ -1,10 +1,24 @@
-<div *ngIf="loading">Chargement des statistiques...</div>
+<h2>Choisissez un sondage :</h2>
 
-<div *ngIf="!loading && results.length > 0">
+<select (change)="selectSondage($event)" [value]="selectedSondageId || ''">
+  <option value="" disabled>-- Sélectionnez un sondage --</option>
+  <option *ngFor="let sondage of sondages" [value]="sondage.id">
+    {{ sondage.nom }}
+  </option>
+</select>
+
+<div *ngIf="loading">Chargement des statistiques...</div>
+<div *ngIf="errorMessage" class="error">{{ errorMessage }}</div>
+
+<div *ngIf="selectedSondageId && questions.length > 0 && !loading">
   <h2>Statistiques du sondage</h2>
+  <h3>{{ questions[0].texteQuestion }}</h3>
+
   <ul>
-    <li *ngFor="let res of results">
-      {{res.texte_option}} : {{res.nombre_votes}} votes
-    </li>
-  </ul>
+  <li *ngFor="let option of questions[0].options">
+    {{ option.texteOption }} - {{ option.resultat?.nombreVotes || 0 }} votes
+    ({{ getVotePercentage(option.resultat?.nombreVotes || 0) }})
+  </li>
+</ul>
+
 </div>

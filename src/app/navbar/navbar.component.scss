@@ -2,8 +2,8 @@
   position: sticky;
   top: 0;
   z-index: 1000;
-  background: linear-gradient(90deg, #0052cc 0%, #1a73e8 100%);
-  color: white;
+  background: linear-gradient(90deg, #004ec4 0%, #1a73e8 100%);
+  color: rgb(0, 45, 192);
   display: flex;
   align-items: center;
   padding: 0 24px;
@@ -39,6 +39,7 @@
   button {
     font-weight: 600;
     font-size: 1.05rem;
+    font-family: 'Waltograph';
     color: #ffd000; // 👈 couleur par défaut du texte (ex : orange pâle)
     background-color: rgb(25, 65, 242); // 👈 fond discret
     text-transform: none;

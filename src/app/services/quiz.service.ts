@@ -2,22 +2,24 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
+export interface ResultatDTO {
+  id: number;
+  reponseId: number;
+  nombreVotes: number;
+}
+
 export interface ReponseOptionDTO {
   id: number;
-  texte: string;
-  // Optionnel: isCorrect?: boolean; // si tu as ça côté backend
+  texteOption: string;
+  questionId: number;
+  resultat?: ResultatDTO;
 }
 
 export interface QuestionDTO {
   id: number;
-  texte: string;
+  texteQuestion: string;
+  sondageId?: number;
   options: ReponseOptionDTO[];
-}
-
-export interface SondageDTO {
-  id: number;
-  titre: string;
-  // autres champs si besoin
 }
 
 @Injectable({
@@ -28,30 +30,23 @@ export class QuizService {
 
   constructor(private http: HttpClient) {}
 
-  getSondage(id: number): Observable<SondageDTO> {
-    return this.http.get<SondageDTO>(`${this.baseUrl}/sondages/${id}`);
-  }
-
-  getQuestions(sondageId: number): Observable<QuestionDTO[]> {
+  getQuestionsBySondage(sondageId: number): Observable<QuestionDTO[]> {
     return this.http.get<QuestionDTO[]>(`${this.baseUrl}/questions/sondage/${sondageId}`);
   }
 
+  addQuestion(sondageId: number, question: { texteQuestion: string }): Observable<QuestionDTO> {
+    return this.http.post<QuestionDTO>(`${this.baseUrl}/questions/sondage/${sondageId}`, question);
+  }
+
+  addOption(questionId: number, option: { texteOption: string }): Observable<ReponseOptionDTO> {
+    return this.http.post<ReponseOptionDTO>(`${this.baseUrl}/questions/${questionId}/options`, option);
+  }
+
   voterOption(optionId: number): Observable<any> {
-    // selon ta route préférée, ici on utilise la route dans ResultatController
     return this.http.post(`${this.baseUrl}/resultats/reponses/${optionId}/vote`, {});
   }
-  // quiz.service.ts (ajouter ces méthodes)
-  addQuestion(sondageId: number, question: { texte: string }) {
-  return this.http.post<QuestionDTO>(`${this.baseUrl}/questions/sondage/${sondageId}`, {
-    texte_question: question.texte
-  });
-}
 
-    addOption(questionId: number, option: { texte_option: string }) {
-    return this.http.post<ReponseOptionDTO>(`${this.baseUrl}/questions/${questionId}/options`, option);
-    }
-    getResultsParSondage(sondageId: number) {
-    return this.http.get<{ reponse_id: number; nombre_votes: number; texte_option: string }[]>(`${this.baseUrl}/resultats/sondages/${sondageId}`);
-    }
-
+  getResultsParSondage(sondageId: number): Observable<{ reponse_id: number; nombre_votes: number; texte_option: string; question_id: number }[]> {
+    return this.http.get<{ reponse_id: number; nombre_votes: number; texte_option: string; question_id: number }[]>(`${this.baseUrl}/resultats/sondages/${sondageId}`);
+  }
 }
