@@ -1,13 +1,32 @@
-# FrontSkeleton
+FrontSkeleton
+Prérequis
 
-## Les installations nécessaire
-- Node JS : https://nodejs.org/en/download
-- Angular : `npm install -g @angular/cli@17`
+Node.js : Télécharge et installe la dernière version depuis nodejs.org
 
-## Avant de lancer le projet
+Angular CLI (version 17) :
 
-Lancer `npm i`
+npm install -g @angular/cli@17
 
-## Pour lancer le projet
+Installation du projet
 
-Lancer `ng serve` et se rendre sur `http://localhost:4200/`
+Depuis la racine du projet, lance la commande suivante pour installer les dépendances :
+
+npm install
+
+Lancement du projet
+
+Pour démarrer l’application en mode développement :
+
+ng serve
+
+
+Puis ouvre ton navigateur sur l’adresse :
+http://localhost:4200/
+
+Connexion administrateur
+
+Pour te connecter en tant qu’admin, utilise les identifiants suivants :
+
+Email : admin@site.com
+
+Mot de passe : admin123
