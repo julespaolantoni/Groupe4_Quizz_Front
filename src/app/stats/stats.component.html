@@ -10,13 +10,31 @@
 <div *ngIf="loading">Chargement des statistiques...</div>
 <div *ngIf="errorMessage" class="error">{{ errorMessage }}</div>
 
-<div *ngIf="selectedSondageId && questions.length > 0 && !loading">
+<div *ngIf="selectedSondageId && questions.length > 0 && !loading" class="stats">
   <h2>Statistiques du sondage</h2>
-  <h3>{{ questions[0].texteQuestion }}</h3>
 
-  <ul>
-    <li *ngFor="let option of questions[0].options">
-      {{ option.texteOption }} - {{ option.resultat?.nombreVotes }} votes
-    </li>
-  </ul>
+  <!-- Itérer sur toutes les questions du sondage -->
+  <div *ngFor="let question of questions" class="question-block">
+    <h3>{{ question.texteQuestion }}</h3>
+
+    <div class="stats-grid">
+      <div class="pie" [ngStyle]="{ 'background-image': buildConicGradient(question.options) }">
+        <div class="center">
+          <div class="total">{{ getTotalVotesForQuestion(question) }}</div>
+          <div class="label">votes</div>
+        </div>
+      </div>
+
+      <ul class="legend">
+        <li *ngFor="let option of question.options; let i = index">
+          <span class="swatch" [style.backgroundColor]="( (i < 8) ? ( (['#4caf50','#2196f3','#ff9800','#e91e63','#9c27b0','#00bcd4','#ffc107','#795548'])[i] ) : '#ccc')"></span>
+          <span class="text">{{ option.texteOption }}</span>
+          <span class="pct">{{ option.resultat?.nombreVotes || 0 }} votes ({{ getVotePercentageForQuestion(option.resultat?.nombreVotes || 0, question) }})</span>
+        </li>
+      </ul>
+    </div>
+
+    <hr />
+  </div>
+
 </div>
