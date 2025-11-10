@@ -20,12 +20,6 @@
       [(ngModel)]="option.text"
       placeholder="Option réponse {{ i + 1 }}"
     />
-    <input
-      type="number"
-      [(ngModel)]="option.votes"
-      placeholder="Votes initiaux"
-      min="0"
-    />
   </div>
 
   <button (click)="ajouterQuestion()">Ajouter la question</button>
@@ -34,10 +28,10 @@
 
   <h3>Questions existantes</h3>
   <div *ngFor="let question of questions">
-    <h4>{{ question.texteQuestion }}</h4>
+    <h3>{{ question.texteQuestion }}</h3>
     <ul>
       <li *ngFor="let option of question.options">
-        {{ option.texteOption }} - {{ option.resultat?.nombreVotes }} votes
+        {{ option.texteOption }} - {{ option.resultat?.nombreVotes ?? 0 }} votes
       </li>
     </ul>
   </div>

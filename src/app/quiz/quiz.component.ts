@@ -18,6 +18,7 @@ export class QuizComponent implements OnInit {
 
   selectedSondageId: number | null = null;
   questions: QuestionDTO[] = [];
+  currentQuestionIndex = 0;
   quizFinished = false;
   userAnswers: Array<number | null> = [];
 
@@ -47,6 +48,10 @@ export class QuizComponent implements OnInit {
     this.loadQuestions();
   }
 
+  get currentQuestion() {
+    return this.questions[this.currentQuestionIndex];
+  }
+
   loadQuestions() {
     if (!this.selectedSondageId) return;
 
@@ -55,11 +60,12 @@ export class QuizComponent implements OnInit {
       next: (questions) => {
         this.questions = questions;
         this.userAnswers = new Array(questions.length).fill(null);
+        this.currentQuestionIndex = 0;
         this.quizFinished = false;
         this.errorMessage = '';
         this.loading = false;
-        this.calculeOptionMajoritaire();
 
+        this.calculeOptionMajoritaire();
         this.loadResultsForSondage(this.selectedSondageId!);
       },
       error: () => {
@@ -71,10 +77,7 @@ export class QuizComponent implements OnInit {
 
   loadResultsForSondage(sondageId: number) {
     this.quizService.getResultsParSondage(sondageId).subscribe({
-      next: (results) => {
-        console.log('Résultats reçus:', results);
-        this.organizeResultsByQuestion(results);
-      },
+      next: (results) => this.organizeResultsByQuestion(results),
       error: () => {}
     });
   }
@@ -82,36 +85,22 @@ export class QuizComponent implements OnInit {
   organizeResultsByQuestion(results: any[]) {
     this.resultsParQuestion = {};
 
-    // Map des options pour faciliter la recherche de meta infos
     const optionMap = new Map<number, { texteOption: string; questionId: number }>();
 
     this.questions.forEach(question => {
       question.options.forEach(option => {
-        optionMap.set(option.id, {
-          texteOption: option.texteOption,
-          questionId: option.questionId
-        });
+        optionMap.set(option.id, { texteOption: option.texteOption, questionId: option.questionId });
       });
 
-      this.resultsParQuestion[question.id] = {
-        questionText: question.texteQuestion,
-        options: [],
-        totalVotes: 0
-      };
+      this.resultsParQuestion[question.id] = { questionText: question.texteQuestion, options: [], totalVotes: 0 };
     });
 
     results.forEach(result => {
       const optionId = result.reponseId;
-      if (!optionId) {
-        console.warn('Option non trouvée pour result.reponseId:', result);
-        return;
-      }
+      if (!optionId) return;
 
       const meta = optionMap.get(optionId);
-      if (!meta) {
-        console.warn('Option non trouvée dans optionMap pour optionId:', optionId);
-        return;
-      }
+      if (!meta) return;
 
       this.resultsParQuestion[meta.questionId].options.push({
         reponse_id: optionId,
@@ -122,7 +111,6 @@ export class QuizComponent implements OnInit {
 
       this.resultsParQuestion[meta.questionId].totalVotes += result.nombreVotes;
     });
-
   }
 
   calculeOptionMajoritaire() {
@@ -139,19 +127,20 @@ export class QuizComponent implements OnInit {
       });
 
       if (maxVotes <= 0) optionMajoritaire = null;
-
       this.majoritaireParQuestion[question.id] = optionMajoritaire;
     });
   }
 
   selectOption(option: ReponseOptionDTO) {
-    if (this.userAnswers.length === 0) return;
-
-    this.userAnswers[0] = option.id;
+    this.userAnswers[this.currentQuestionIndex] = option.id;
 
     this.quizService.voterOption(option.id).subscribe({
       next: () => {
-        this.quizFinished = true;
+        if (this.currentQuestionIndex < this.questions.length - 1) {
+          this.currentQuestionIndex++;
+        } else {
+          this.quizFinished = true;
+        }
         this.calculeOptionMajoritaire();
       },
       error: () => {
@@ -166,6 +155,7 @@ export class QuizComponent implements OnInit {
     this.quizFinished = false;
     this.questions = [];
     this.userAnswers = [];
+    this.currentQuestionIndex = 0;
     this.errorMessage = '';
     this.resultsParQuestion = {};
   }

@@ -14,40 +14,39 @@
 <!-- Message d'erreur -->
 <div *ngIf="errorMessage">{{ errorMessage }}</div>
 
-<!-- Affichage de la question uniquement si le quiz n'est pas fini -->
-<div *ngIf="selectedSondageId && !quizFinished && questions.length > 0" class="quiz-container">
-  <h2>Question : {{ questions[0].texteQuestion }}</h2>
+<!-- Affichage de la question actuelle -->
+<div *ngIf="selectedSondageId && !quizFinished && currentQuestion" class="quiz-container">
+  <h2>Question {{ currentQuestionIndex + 1 }} : {{ currentQuestion.texteQuestion }}</h2>
 
   <div class="options">
-    <button *ngFor="let option of questions[0].options"
+    <button *ngFor="let option of currentQuestion.options"
             (click)="selectOption(option)">
       {{ option.texteOption }}
     </button>
   </div>
 </div>
 
-<!-- Affichage des résultats uniquement si le quiz est fini -->
-<div *ngIf="quizFinished && questions.length > 0" class="result">
+<!-- Affichage des résultats -->
+<div *ngIf="quizFinished" class="result">
   <h2>Merci d'avoir participé !</h2>
-
   <h3>Résultats</h3>
 
-  <p><strong>{{ questions[0].texteQuestion }} :</strong></p>
+  <div *ngFor="let question of questions">
+    <p><strong>{{ question.texteQuestion }} :</strong></p>
 
-  <ul>
-    <li *ngFor="let option of questions[0].options"
-        [style.fontWeight]="
-          majoritaireParQuestion[questions[0].id]?.id === option.id ? 'bold' : 'normal'
-        ">
-      {{ option.texteOption }} -
-      {{ getPourcentageVotes(getVotesForOption(questions[0].id, option.id), questions[0].id) }}%
-      <span *ngIf="userAnswers[0] !== null && userAnswers[0] === option.id">
-        <strong>
-          {{ userAnswers[0] === majoritaireParQuestion[questions[0].id]?.id ? '✅ Correct' : '❌ Incorrect' }}
-        </strong>
-      </span>
-    </li>
-  </ul>
+    <ul>
+      <li *ngFor="let option of question.options"
+          [style.fontWeight]="majoritaireParQuestion[question.id]?.id === option.id ? 'bold' : 'normal'">
+        {{ option.texteOption }} -
+        {{ getPourcentageVotes(getVotesForOption(question.id, option.id), question.id) }}%
+        <span *ngIf="userAnswers[questions.indexOf(question)] === option.id">
+          <strong>
+            {{ userAnswers[questions.indexOf(question)] === majoritaireParQuestion[question.id]?.id ? '✅ Correct' : '❌ Incorrect' }}
+          </strong>
+        </span>
+      </li>
+    </ul>
+  </div>
 
   <button (click)="restartQuiz()">Recommencer</button>
 </div>

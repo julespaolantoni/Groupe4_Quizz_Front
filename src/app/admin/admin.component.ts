@@ -14,11 +14,11 @@ export class AdminComponent implements OnInit {
   questions: QuestionDTO[] = [];
   newQuestionText: string = '';
 
-  newOptions: { text: string; votes: number }[] = [
-    { text: '', votes: 0 },
-    { text: '', votes: 0 },
-    { text: '', votes: 0 },
-    { text: '', votes: 0 },
+  newOptions: { text: string }[] = [
+    { text: '' },
+    { text: '' },
+    { text: '' },
+    { text: '' },
   ];
 
   constructor(private quizService: QuizService) {}
@@ -67,42 +67,36 @@ export class AdminComponent implements OnInit {
       return;
     }
 
-    // On n'envoie pas le champ "resultat" : le backend créera le Resultat associé (relation cascade)
     const newOptionPayloads: ReponseOptionDTO[] = validOptions.map(opt => ({
       id: 0,
       texteOption: opt.text,
-      questionId: 0 // sera défini après création de la question
-    } as ReponseOptionDTO));
+      questionId: 0
+    }));
 
-    // Créer la question sans options (les options seront créées séparément via l'endpoint addOption)
     const questionDTO: QuestionDTO = {
       id: 0,
       texteQuestion: this.newQuestionText,
       sondageId: this.sondageId,
-      options: [] // backend remplira / on créera après
+      options: []
     };
 
     this.quizService.addQuestion(questionDTO).subscribe({
       next: (createdQuestion) => {
-        // Si le backend retourne l'id de la question créée, on crée les options associées
-        const qId = createdQuestion && createdQuestion.id ? createdQuestion.id : 0;
+        const qId = createdQuestion?.id || 0;
         if (!qId) {
-          // fallback : recharger les questions et avertir l'utilisateur
-          console.warn('L’id de la question créée est invalide, tentative de rechargement des questions.');
+          console.warn('L’id de la question créée est invalide, tentative de rechargement.');
           this.loadQuestions();
           this.resetForm();
           return;
         }
 
-        // Mettre à jour questionId dans les payloads
         const calls = newOptionPayloads.map(optPayload => {
           optPayload.questionId = qId;
           return this.quizService.addOption(qId, optPayload);
         });
 
         forkJoin(calls).subscribe({
-          next: (results: OptionDTO[]) => {
-            // Toutes les options créées, recharger les questions
+          next: () => {
             this.loadQuestions();
             this.resetForm();
           },
@@ -124,10 +118,10 @@ export class AdminComponent implements OnInit {
   resetForm(): void {
     this.newQuestionText = '';
     this.newOptions = [
-      { text: '', votes: 0 },
-      { text: '', votes: 0 },
-      { text: '', votes: 0 },
-      { text: '', votes: 0 },
+      { text: '' },
+      { text: '' },
+      { text: '' },
+      { text: '' },
     ];
   }
 }
