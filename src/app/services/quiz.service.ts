@@ -12,7 +12,7 @@ export interface ReponseOptionDTO {
   id: number;
   texteOption: string;
   questionId: number;
-  resultat: ResultatDTO;
+  resultat?: ResultatDTO | null;
 }
 
 export interface QuestionDTO {
@@ -21,10 +21,10 @@ export interface QuestionDTO {
   sondageId: number;
   options: ReponseOptionDTO[];
 }
-export interface NewOption {
-  texteOption: string;
-  nombreVotes: number;
-}
+//export interface NewOption {
+//  texteOption: string;
+//  nombreVotes: number;
+//}
 export interface OptionDTO {
   id: number;
   texteOption: string;
@@ -61,8 +61,14 @@ export class QuizService {
 
 
 
-  addOption(questionId: number, option: NewOption): Observable<OptionDTO> {
-    return this.http.post<OptionDTO>(`${this.baseUrl}/questions/${questionId}/options`, option);
+  // Envoie un ReponseOptionDTO (le backend valide notamment questionId et texteOption)
+  addOption(questionId: number, option: ReponseOptionDTO): Observable<OptionDTO> {
+    // Construire un payload minimal pour éviter d'envoyer id:0 qui perturbe JPA
+    const payload: any = {
+      texteOption: option.texteOption,
+      questionId: questionId
+    };
+    return this.http.post<OptionDTO>(`${this.baseUrl}/questions/${questionId}/options`, payload);
   }
 
   voterOption(optionId: number): Observable<any> {

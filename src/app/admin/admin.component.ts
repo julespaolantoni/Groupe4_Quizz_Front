@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { QuizService, QuestionDTO, SondageDTO, ReponseOptionDTO } from '../services/quiz.service';
+import { QuizService, QuestionDTO, SondageDTO, ReponseOptionDTO, OptionDTO } from '../services/quiz.service';
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-admin',
@@ -66,32 +67,56 @@ export class AdminComponent implements OnInit {
       return;
     }
 
-    const options: ReponseOptionDTO[] = validOptions.map(opt => ({
+    // On n'envoie pas le champ "resultat" : le backend créera le Resultat associé (relation cascade)
+    const newOptionPayloads: ReponseOptionDTO[] = validOptions.map(opt => ({
       id: 0,
       texteOption: opt.text,
-      questionId: 0, // sera défini côté backend
-      resultat: {
-        id: 0,
-        reponseId: 0, // sera défini côté backend
-        nombreVotes: opt.votes ?? 0
-      }
-    }));
+      questionId: 0 // sera défini après création de la question
+    } as ReponseOptionDTO));
 
+    // Créer la question sans options (les options seront créées séparément via l'endpoint addOption)
     const questionDTO: QuestionDTO = {
       id: 0,
       texteQuestion: this.newQuestionText,
       sondageId: this.sondageId,
-      options: options
+      options: [] // backend remplira / on créera après
     };
 
     this.quizService.addQuestion(questionDTO).subscribe({
-      next: () => {
-        this.loadQuestions();
-        this.resetForm();
+      next: (createdQuestion) => {
+        // Si le backend retourne l'id de la question créée, on crée les options associées
+        const qId = createdQuestion && createdQuestion.id ? createdQuestion.id : 0;
+        if (!qId) {
+          // fallback : recharger les questions et avertir l'utilisateur
+          console.warn('L’id de la question créée est invalide, tentative de rechargement des questions.');
+          this.loadQuestions();
+          this.resetForm();
+          return;
+        }
+
+        // Mettre à jour questionId dans les payloads
+        const calls = newOptionPayloads.map(optPayload => {
+          optPayload.questionId = qId;
+          return this.quizService.addOption(qId, optPayload);
+        });
+
+        forkJoin(calls).subscribe({
+          next: (results: OptionDTO[]) => {
+            // Toutes les options créées, recharger les questions
+            this.loadQuestions();
+            this.resetForm();
+          },
+          error: (err) => {
+            console.error('Erreur lors de la création des options :', err);
+            alert('La question a été créée mais une erreur est survenue lors de la création des options.');
+            this.loadQuestions();
+            this.resetForm();
+          }
+        });
       },
       error: (err) => {
-        console.error("Erreur lors de l'ajout de la question :", err);
-        alert("Une erreur est survenue.");
+        console.error('Erreur lors de l\'ajout de la question :', err);
+        alert('Une erreur est survenue.');
       }
     });
   }

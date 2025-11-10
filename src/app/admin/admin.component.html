@@ -37,7 +37,7 @@
     <h4>{{ question.texteQuestion }}</h4>
     <ul>
       <li *ngFor="let option of question.options">
-        {{ option.texteOption }} - {{ option.resultat.nombreVotes}} votes
+        {{ option.texteOption }} - {{ option.resultat?.nombreVotes }} votes
       </li>
     </ul>
   </div>

@@ -16,7 +16,7 @@
 
   <ul>
     <li *ngFor="let option of questions[0].options">
-      {{ option.texteOption }} - {{ option.resultat.nombreVotes}} votes
+      {{ option.texteOption }} - {{ option.resultat?.nombreVotes }} votes
     </li>
   </ul>
 </div>
